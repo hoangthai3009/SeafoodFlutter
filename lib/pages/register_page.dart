@@ -8,10 +8,21 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   final TextEditingController fullnameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
   Future<void> _register(BuildContext context) async {
+    if (passwordController.text != confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Password and Confirm Password do not match"),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
     final String apiUrl = '$baseUrl/api/auth/register';
     final response = await http.post(
       Uri.parse(apiUrl),
@@ -24,7 +35,6 @@ class RegisterPage extends StatelessWidget {
       }),
       headers: {'Content-Type': 'application/json'},
     );
-
     if (response.statusCode == 200) {
       Navigator.pushReplacementNamed(context, '/login');
     } else {
@@ -66,6 +76,8 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(height: 10),
               _buildTextField(passwordController, 'Password', true),
               const SizedBox(height: 10),
+              _buildTextField(confirmPasswordController, 'Re Password', true),
+              const SizedBox(height: 10),
               _buildTextField(fullnameController, 'Fullname'),
               const SizedBox(height: 10),
               _buildTextField(phoneController, 'Phone'),
@@ -95,14 +107,14 @@ class RegisterPage extends StatelessWidget {
   }
 
   Widget _buildTextField(TextEditingController controller, String labelText,
-      [bool obscureText = false]) {
+      [bool obscureText = false, bool isConfirmPassword = false]) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
         labelText: labelText,
         border: const OutlineInputBorder(),
       ),
-      obscureText: obscureText,
+      obscureText: obscureText && !isConfirmPassword,
     );
   }
 }

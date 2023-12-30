@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'menu_page.dart';
-//import 'promotion_page.dart';
 import 'profile_page.dart';
+import 'promotion_page.dart';
 
 class MainNavigationPage extends StatefulWidget {
   @override
@@ -12,7 +12,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   int _selectedIndex = 0;
   final List<Widget> _pages = [
     MenuPage(),
-    //PromotionPage(),
+    PromotionPage(),
     ProfilePage(),
   ];
 
@@ -34,10 +34,10 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
             icon: Icon(Icons.menu),
             label: 'Menu',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.local_offer),
-          //   label: 'Promotions',
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.card_giftcard),
+            label: 'Promotions',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',

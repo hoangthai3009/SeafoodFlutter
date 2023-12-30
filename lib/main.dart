@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Provider/AuthProvider.dart';
 import 'Provider/CartProvider.dart';
+import 'pages/bill_page.dart';
 import 'pages/cart_page.dart';
 import 'pages/checkout_page.dart';
 import 'pages/main_mavigation_page.dart';
 import 'pages/login_page.dart';
+import 'pages/success_page.dart';
 import 'pages/register_page.dart';
 
 void main() {
@@ -32,6 +34,9 @@ class MyApp extends StatelessWidget {
           '/cart': (context) => CartPage(),
           '/main': (context) => MainNavigationPage(),
           '/checkout': (context) => CheckoutPage(),
+          '/success': (context) => SuccessPage(),
+          //'/userDetail': (context) => UserDetailPage(),
+          '/bill': (context) => BillPage(),
           // Other routes...
         },
         home: MainNavigationPage(),

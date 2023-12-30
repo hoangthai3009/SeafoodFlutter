@@ -3,15 +3,17 @@ class User {
   final String fullname;
   final String username;
   final String email;
-  final String address;
+  final String? address;
   final String phone;
+  final String? avatarUrl;
 
   User({
     required this.id,
     required this.fullname,
     required this.username,
     required this.email,
-    required this.address,
+    this.address,
     required this.phone,
+    this.avatarUrl,
   });
 }

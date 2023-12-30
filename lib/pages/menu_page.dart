@@ -89,7 +89,7 @@ class _MenuPageState extends State<MenuPage> {
       slivers: <Widget>[
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: _buildSearchBar(),
           ),
         ),
@@ -101,7 +101,7 @@ class _MenuPageState extends State<MenuPage> {
             crossAxisCount: 2,
             crossAxisSpacing: 10.0,
             mainAxisSpacing: 10.0,
-            childAspectRatio: 0.7,
+            childAspectRatio: 0.75,
           ),
           delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
@@ -119,7 +119,7 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Widget _buildCategoryList() {
-    return Container(
+    return SizedBox(
       height: 120.0,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -180,82 +180,92 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Widget _buildSeafoodItem(Seafood seafood) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      elevation: 5,
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SeafoodDetailPage(seafood: seafood),
+  return Card(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15.0),
+    ),
+    elevation: 5,
+    shadowColor: Colors.grey[400],
+    child: InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SeafoodDetailPage(seafood: seafood),
+          ),
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(15.0),
+              topRight: Radius.circular(15.0),
             ),
-          );
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(15.0),
-                topRight: Radius.circular(15.0),
-              ),
-              child: Image.network(
-                seafood.mainImage,
-                height: 140.0,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+            child: Image.network(
+              seafood.mainImage,
+              height: 130.0,
+              width: double.infinity,
+              fit: BoxFit.cover,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                seafood.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 23,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  seafood.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      seafood.category.name,
-                      style: const TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontSize: 20,
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: currencyFormat.format(seafood.price),
-                            style: TextStyle(color: Colors.green, fontSize: 18),
-                          ),
-                          TextSpan(
-                            text: ' / ' + seafood.unit,
-                            style: TextStyle(color: Colors.black, fontSize: 18),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                const SizedBox(height: 8.0),
+                Text(
+                  seafood.category.name,
+                  style: const TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: 18,
+                    color: Colors.blueGrey,
+                  ),
                 ),
-              ),
+                const SizedBox(height: 8.0),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: currencyFormat.format(seafood.price),
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' / ${seafood.unit}',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   @override
   void dispose() {

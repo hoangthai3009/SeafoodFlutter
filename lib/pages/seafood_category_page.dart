@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import '../Models/Seafood.dart';
 import '../Service/SeafoodService.dart';
 import 'seafood_detail_page.dart';
-import 'package:intl/intl.dart';
 
 class SeafoodCategoryPage extends StatefulWidget {
   final int categoryId;
@@ -33,10 +34,10 @@ class _SeafoodCategoryPageState extends State<SeafoodCategoryPage> {
       setState(() => isLoading = true);
       seafoods = await fetchSeafoodsByCategory(
           widget.categoryId, keyword, currentPage);
-      setState(() => isLoading = false);
     } catch (e) {
-      setState(() => isLoading = false);
       // Handle exceptions
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 
@@ -72,7 +73,7 @@ class _SeafoodCategoryPageState extends State<SeafoodCategoryPage> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 10.0,
                 mainAxisSpacing: 10.0,
-                childAspectRatio: 0.7,
+                childAspectRatio: 0.75,
               ),
               itemCount: seafoods.length,
               itemBuilder: (context, index) {
@@ -95,6 +96,7 @@ class _SeafoodCategoryPageState extends State<SeafoodCategoryPage> {
         borderRadius: BorderRadius.circular(15.0),
       ),
       elevation: 5,
+      shadowColor: Colors.grey[400],
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -105,7 +107,7 @@ class _SeafoodCategoryPageState extends State<SeafoodCategoryPage> {
           );
         },
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.only(
@@ -114,51 +116,59 @@ class _SeafoodCategoryPageState extends State<SeafoodCategoryPage> {
               ),
               child: Image.network(
                 seafood.mainImage,
-                height: 140.0,
+                height: 130.0,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                seafood.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 23,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      seafood.category.name,
-                      style: const TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontSize: 20,
-                      ),
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    seafood.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.black87,
                     ),
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: currencyFormat.format(seafood.price),
-                            style: const TextStyle(color: Colors.green, fontSize: 18),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    seafood.category.name,
+                    style: const TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontSize: 18,
+                      color: Colors.blueGrey,
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: currencyFormat.format(seafood.price),
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
-                          TextSpan(
-                            text: ' / ${seafood.unit}',
-                            style: const TextStyle(color: Colors.black, fontSize: 18),
+                        ),
+                        TextSpan(
+                          text: ' / ${seafood.unit}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
                           ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

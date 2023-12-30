@@ -15,6 +15,6 @@ class CartItem {
     required this.image,
     required this.unit,
     required this.categoryName,
-    required this.quantity,
+    required this.quantity, 
   }) : totalPrice = price * quantity;
 }

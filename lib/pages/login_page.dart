@@ -22,7 +22,8 @@ class LoginPage extends StatelessWidget {
     );
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
+    final responseBody = utf8.decode(response.bodyBytes);
+      final Map<String, dynamic> responseData = jsonDecode(responseBody);
       final User user = User(
         id: responseData['id'],
         fullname: responseData['fullname'],
