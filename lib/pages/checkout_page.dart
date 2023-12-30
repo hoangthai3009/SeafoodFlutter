@@ -188,6 +188,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
               DropdownButton<String>(
+                isDense: true,
                 value: selectedPaymentMethod,
                 items: <String>['COD', 'PayPal']
                     .map<DropdownMenuItem<String>>((String value) {
@@ -204,7 +205,43 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ),
             ],
           ),
-          const SizedBox(height: 4.0),
+          if (selectedPaymentMethod != 'COD')
+            Column(
+              children: [
+                const SizedBox(height: 8.0),
+                Row(
+                  children: [
+                    const Text(
+                      'Trả trước (tùy chọn): ',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    DropdownButton<double>(
+                      isDense: true,
+                      value: selectedValue,
+                      items: <double>[0.5, 0.7, 1]
+                          .map<DropdownMenuItem<double>>((double value) {
+                        return DropdownMenuItem<double>(
+                          value: value,
+                          child: Text(value == 1
+                              ? 'Không'
+                              : '${(value * 100).toInt()}%'),
+                        );
+                      }).toList(),
+                      onChanged: (double? newValue) {
+                        setState(() {
+                          selectedValue = newValue!;
+                          cartProvider.setTotalPaid(
+                              cartProvider.totalPay * selectedValue);
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          const SizedBox(height: 8.0),
           Text(
             'Tổng: ${currencyFormat.format(cartProvider.totalPrice)}',
             style: const TextStyle(
@@ -251,86 +288,43 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       .setTotalPaid(cartProvider.totalPay * selectedValue);
                   _sendCheckoutRequest(context, cartProvider, authProvider);
                 } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title:
-                            const Text('Bạn muốn thanh toán trước bao nhiêu?'),
-                        content: StatefulBuilder(builder:
-                            (BuildContext context, StateSetter setState) {
-                          return DropdownButton<double>(
-                            value: selectedValue,
-                            items: <double>[0.5, 0.7, 1]
-                                .map<DropdownMenuItem<double>>((double value) {
-                              return DropdownMenuItem<double>(
-                                value: value,
-                                child: Text('${(value * 100).toInt()}%'),
-                              );
-                            }).toList(),
-                            onChanged: (double? newValue) {
-                              setState(() {
-                                selectedValue = newValue!;
-                                cartProvider.setTotalPaid(
-                                    cartProvider.totalPay * selectedValue);
-                              });
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => PaypalCheckout(
+                        sandboxMode: true,
+                        clientId:
+                            "AauH8esyIJU865PwyxnygvrbjjF7NGw9pBbEi9vjjnAc-_hyiio5_hjw4_WJDACrI3i1vUbOf0otvSmv",
+                        secretKey:
+                            "EBlg7frWEhrVohJxX2eUJWmsDmQevEFsH6dBvugLO27Dr1z9l10XcFVxiOu-WZAVF6d7LD8GHkCtGO2D",
+                        returnURL: "success.snippetcoder.com",
+                        cancelURL: "cancel.snippetcoder.com",
+                        transactions: [
+                          {
+                            "amount": {
+                              "total": cartProvider.totalPaid,
+                              "currency": "USD",
+                              "details": {
+                                "subtotal": cartProvider.totalPaid,
+                                "shipping": '0',
+                                "shipping_discount": 0,
+                              }
                             },
-                          );
-                        }),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('Hủy'),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    PaypalCheckout(
-                                  sandboxMode: true,
-                                  clientId:
-                                      "AauH8esyIJU865PwyxnygvrbjjF7NGw9pBbEi9vjjnAc-_hyiio5_hjw4_WJDACrI3i1vUbOf0otvSmv",
-                                  secretKey:
-                                      "EBlg7frWEhrVohJxX2eUJWmsDmQevEFsH6dBvugLO27Dr1z9l10XcFVxiOu-WZAVF6d7LD8GHkCtGO2D",
-                                  returnURL: "success.snippetcoder.com",
-                                  cancelURL: "cancel.snippetcoder.com",
-                                  transactions: [
-                                    {
-                                      "amount": {
-                                        "total": cartProvider.totalPaid,
-                                        "currency": "USD",
-                                        "details": {
-                                          "subtotal": cartProvider.totalPaid,
-                                          "shipping": '0',
-                                          "shipping_discount": 0,
-                                        }
-                                      },
-                                    },
-                                  ],
-                                  note:
-                                      "Contact us for any questions on your order.",
-                                  onSuccess: (Map params) async {
-                                    _sendCheckoutRequest(
-                                        context, cartProvider, authProvider);
-                                  },
-                                  onError: (error) {
-                                    print("onError: $error");
-                                    Navigator.pop(context);
-                                  },
-                                  onCancel: () {
-                                    print('cancelled:');
-                                  },
-                                ),
-                              ));
-                            },
-                            child: const Text('Đồng ý'),
-                          ),
+                          },
                         ],
-                      );
-                    },
+                        note: "Contact us for any questions on your order.",
+                        onSuccess: (Map params) async {
+                          _sendCheckoutRequest(
+                              context, cartProvider, authProvider);
+                        },
+                        onError: (error) {
+                          print("onError: $error");
+                          Navigator.pop(context);
+                        },
+                        onCancel: () {
+                          print('cancelled:');
+                        },
+                      ),
+                    ),
                   );
                 }
               }

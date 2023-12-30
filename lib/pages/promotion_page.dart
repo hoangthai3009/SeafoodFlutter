@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:seafood_mobile_app/constants.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -62,6 +63,12 @@ class PromotionPage extends StatelessWidget {
                         const SizedBox(height: 4.0),
                         Text(
                           'Số lượng: ${snapshot.data![index].quantity}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          'HSD: ${DateFormat('dd-MM-yyyy').format(snapshot.data![index].expiredDay)}',
                           style: const TextStyle(
                             fontSize: 16,
                           ),

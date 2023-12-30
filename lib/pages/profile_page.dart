@@ -5,12 +5,6 @@ import '../Provider/AuthProvider.dart';
 import 'package:http/http.dart' as http;
 import '../constants.dart';
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../Models/User.dart';
-import '../Provider/AuthProvider.dart';
-import 'package:http/http.dart' as http;
-import '../constants.dart';
 
 class ProfilePage extends StatelessWidget {
   @override

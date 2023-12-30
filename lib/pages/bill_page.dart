@@ -46,24 +46,23 @@ class BillPage extends StatelessWidget {
                     .map(
                       (bill) => DataRow(cells: [
                         DataCell(Text(bill.address)),
-                        DataCell(
-                            Text(currencyFormat.format(bill.totalPrice))),
+                        DataCell(Text(currencyFormat.format(bill.totalPrice))),
                         DataCell(Text('${bill.discount} %')),
-                        DataCell(
-                            Text(currencyFormat.format(bill.totalPay))),
+                        DataCell(Text(currencyFormat.format(bill.totalPay))),
                         DataCell(Text(bill.paymentMethod)),
-                        DataCell(Text('${(bill.paidPercentage*100).toInt()} %')),
                         DataCell(
-                            Text(currencyFormat.format(bill.totalPaid))),
-                        DataCell(Text('${bill.createAt}')),
+                            Text('${(bill.paidPercentage * 100).toInt()} %')),
+                        DataCell(Text(currencyFormat.format(bill.totalPaid))),
+                        DataCell(Text(
+                            DateFormat('dd-MM-yyyy').format(bill.createAt))),
                         DataCell(
                           TextButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => BillDetailsPage(
-                                        billId: bill.id)),
+                                    builder: (context) =>
+                                        BillDetailsPage(billId: bill.id)),
                               );
                             },
                             child: const Text('Chi tiết'),

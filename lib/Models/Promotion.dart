@@ -4,6 +4,7 @@ class Promotion {
   final String name;
   final String description;
   final double discount;
+  final DateTime expiredDay;
 
   Promotion({
     required this.code,
@@ -11,6 +12,7 @@ class Promotion {
     required this.name,
     required this.description,
     required this.discount,
+    required this.expiredDay,
   });
 
   factory Promotion.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Promotion {
       name: json['name'],
       description: json['description'],
       discount: json['discount'],
+      expiredDay: DateTime.parse(json['expired_day']),
     );
   }
 }
